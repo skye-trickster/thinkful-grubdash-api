@@ -7,14 +7,13 @@ const orders = require(path.resolve("src/data/orders-data"));
 // Use this function to assigh ID's when necessary
 const nextId = require("../utils/nextId");
 
-// TODO: Implement the /orders handlers needed to make the tests pass
 // VERIFICATION FUNCTIONS
 
 /**
  * Check if property exists in data
  * @param {string} property the name of the property
  */
-const propertyExists = (property) => {
+function propertyExists(property) {
     return function (request, response, next) {
 
         if (request.body.data[property]) return next()
@@ -27,7 +26,7 @@ const propertyExists = (property) => {
  * Creates a function that ensures that the property isn't an empty string
  * @param {string} property the name of the property 
  */
-const propertyStringNotEmpty = (property) => {
+function propertyStringNotEmpty(property) {
     return function (request, response, next) {
         const value = request.body.data[property]
 
@@ -41,7 +40,7 @@ const propertyStringNotEmpty = (property) => {
  * Creates a function that ensures that the property isn't an empty string
  * @param {string} property the name of the property 
  */
-const propertyArrayNotEmpty = (property) => {
+function propertyArrayNotEmpty(property) {
     return function (request, response, next) {
 
         const value = request.body.data[property]
@@ -53,7 +52,7 @@ const propertyArrayNotEmpty = (property) => {
 }
 
 /** Ensures that every dish in the dishes function has a valid quantity amount. */
-const validateDishQuantity = (request, response, next) => {
+function validateDishQuantity(request, response, next) {
     const { dishes } = request.body.data
 
     for (let index in dishes) {
@@ -74,7 +73,7 @@ const propertyValidation = [
 ]
 
 /** Finds and stores order in `response.locals.order` and index in `response.locals.index` */
-const orderExists = (request, response, next) => {
+function orderExists(request, response, next) {
     let found = null
     let { orderId } = request.params
     let foundIndex = -1
@@ -96,7 +95,7 @@ const orderExists = (request, response, next) => {
 }
 
 /** Given an id in the body, checks to make sure ID in body matches the paramater */
-const idMatch = (request, response, next) => {
+function idMatch(request, response, next) {
     const { id } = request.body.data
     const { orderId } = request.params
 
@@ -107,7 +106,7 @@ const idMatch = (request, response, next) => {
 }
 
 /** Given a status, makes sure it's a valid status. 400 error otherwise. */
-const checkValidStatus = (request, response, next) => {
+function checkValidStatus(request, response, next) {
     const { status } = request.body.data
 
     const validStatuses = ["pending", "preparing", "out-for-delivery", "delivered"]
@@ -119,7 +118,7 @@ const checkValidStatus = (request, response, next) => {
 }
 
 /** Given a status, makes sure that the status isn't delivered. 400 error otherwise. */
-const statusNotDelivered = (request, response, next) => {
+function statusNotDelivered(request, response, next) {
 
     const { status } = response.locals.order
 
@@ -130,7 +129,7 @@ const statusNotDelivered = (request, response, next) => {
 }
 
 /** Ensures that the status is pending for deletion */
-const statusPending = (request, response, next) => {
+function statusPending(request, response, next) {
     const { status } = response.locals.order
 
     if (status === "pending")
@@ -140,11 +139,11 @@ const statusPending = (request, response, next) => {
 }
 
 // OPERATION FUNCTIONS
-const list = (request, response) => {
+function list(request, response) {
     response.json({ data: orders })
 }
 
-const create = (request, response) => {
+function create(request, response) {
 
     const { data } = request.body
 
@@ -158,11 +157,11 @@ const create = (request, response) => {
     response.status(201).json({ data: newOrder })
 }
 
-const read = (request, response) => {
+function read(request, response) {
     response.json({ data: response.locals.order })
 }
 
-const update = (request, response) => {
+function update(request, response) {
     let { order } = response.locals
     const { data } = request.body
 
@@ -175,7 +174,7 @@ const update = (request, response) => {
     response.json({ data: order })
 }
 
-const destroy = (request, response) => {
+function destroy(request, response) {
     const { index } = response.locals.order
 
     const deletedIndex = orders.splice(index, 1)

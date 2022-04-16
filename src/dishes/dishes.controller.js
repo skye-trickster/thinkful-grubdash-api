@@ -13,7 +13,7 @@ const nextId = require("../utils/nextId");
  * Check if property exists in data
  * @param {string} property the name of the property
  */
-const propertyExists = (property) => {
+function propertyExists(property) {
     return function (request, response, next) {
 
         if (request.body.data[property]) return next()
@@ -26,7 +26,7 @@ const propertyExists = (property) => {
  * Creates a function that ensures that the property isn't an empty string
  * @param {string} property the name of the property 
  */
-const propertyNotEmpty = (property) => {
+function propertyNotEmpty(property) {
     return function (request, response, next) {
 
         if (request.body.data[property] !== "") return next()
@@ -39,7 +39,7 @@ const propertyNotEmpty = (property) => {
  * Creates a function that ensures that the property is a number
  * @param {string} property 
  */
-const propertyValidNumber = (property) => {
+function propertyValidNumber(property) {
     return function (request, response, next) {
         const value = request.body.data[property]
         if (typeof value === "number") return next()
@@ -53,7 +53,7 @@ const propertyValidNumber = (property) => {
  * @param {number} min The minimum value that the property should be
  * @returns {function}
  */
-const propertyMinimum = (property, min) => {
+function propertyMinimum(property, min) {
     return function (request, response, next) {
         const value = request.body.data[property]
         if (value >= min) return next()
@@ -62,7 +62,7 @@ const propertyMinimum = (property, min) => {
 }
 
 /** Given a dishId, looks for and stores the dish in response.locals.dish */
-const dishExists = (request, response, next) => {
+function dishExists(request, response, next) {
     let found = null
     let { dishId } = request.params
 
@@ -75,7 +75,7 @@ const dishExists = (request, response, next) => {
 }
 
 /** Given an id in the body, checks to make sure  */
-const idMatch = (request, response, next) => {
+function idMatch(request, response, next) {
     const { id } = request.body.data
     const { dishId } = request.params
 
@@ -100,11 +100,11 @@ const validPropertyCheck = [
 
 // OPERATION FUNCTIONS
 
-const list = (request, response) => {
+function list(request, response) {
     response.json({ data: dishes })
 }
 
-const create = (request, response) => {
+function create(request, response) {
     const { data: { name, description, price, image_url } = {} } = request.body
     const dish = {
         id: nextId(),
@@ -118,11 +118,11 @@ const create = (request, response) => {
     response.status(201).json({ data: dish })
 }
 
-const read = (request, response) => {
+function read(request, response) {
     response.json({ data: response.locals.dish })
 }
 
-const update = (request, response) => {
+function update(request, response) {
     let { dish } = response.locals
     const { data } = request.body
 
