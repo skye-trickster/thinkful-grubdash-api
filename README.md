@@ -2,7 +2,7 @@
 
 ## Disclaimer
 
-These instructions are copied and pasted from.
+This README is a copy of given instructions for developing the GrubDash API app. Thus, this will have specific instructions of what requirements were to be utilized to complete the project.
 
 ## Introduction
 
