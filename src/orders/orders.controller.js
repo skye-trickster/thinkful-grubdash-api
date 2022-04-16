@@ -21,16 +21,39 @@ const checkOrderStatus = (request, response, next) => {
     return next()
 }
 
-const verifyUpdateOrderStatus = (request, response, next) => {
-    const { status } = response.locals.item
-    if (status === "invalid")
-        return next(new ErrorCode(400, "Unable to update invalid statuses"))
+const verifyDishAmount = (request, response, next) => {
+    const { dishes, id } = response.locals.item
+
+    if (!(dishes || dishes.length))
+        return next(new ErrorCode(400, `Dish ${id} must have a quantity that is an integer greater than 0`))
+
+    for (let index in dishes) {
+        const dish = dishes[index]
+        if (!dish.quantity)
+            return next(new ErrorCode(400, `Dish ${id} must have a quantity that is an integer greater than 0`))
+    }
+
+
     return next()
+
+
+}
+
+const verifyUpdateOrderStatus = (request, response, next) => {
+    const { status } = request.body.data
+
+    if (status && ["pending", "preparing", "out-for-delivery"].includes(status))
+        return next()
+
+    if (status === "delivered")
+        return next(new ErrorCode(400, "A delivered order cannot be changed"))
+
+    return next(new ErrorCode(400, "Order must have a status of pending, preparing, out-for-delivery, delivered"))
 }
 
 module.exports = controller(orders, nextId, {
     paramName: "orderId",
     requiredProperties: ["deliverTo", "mobileNumber", `dishes`],
     updateVerifications: [verifyUpdateOrderStatus],
-    deleteVerifications: [checkOrderStatus]
+    deleteVerifications: [checkOrderStatus, verifyDishAmount]
 })

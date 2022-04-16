@@ -206,7 +206,7 @@ const controller = (list, nextId, options = {}) => {
         template = false,
         additionalQueries = {},
         deleteVerifications = [],
-        updateVerifications
+        updateVerifications = []
     } = options
     console.log(additionalQueries)
     const item = new Controller(list);
