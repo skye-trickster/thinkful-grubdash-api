@@ -1,4 +1,4 @@
-/*const request = require("supertest");
+const request = require("supertest");
 const orders = require("../src/data/orders-data");
 const ordersRouter = require("../src/orders/orders.router");
 const makeTestApp = require("./make-test-app");
@@ -758,7 +758,7 @@ describe("orders router", () => {
       expect(response.body.data).toBeUndefined();
       expect(response.body.error).toBeUndefined();
       expect(response.status).toBe(204);
-      
+
       const deleted = await request(app)
         .get(`${ATTACHED_PATH}/22`)
         .set("Accept", "application/json");
@@ -839,4 +839,3 @@ describe("orders router", () => {
     });
   });
 });
-*/
