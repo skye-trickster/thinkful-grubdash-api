@@ -52,6 +52,7 @@ const propertyArrayNotEmpty = (property) => {
     }
 }
 
+/** Ensures that every dish in the dishes function has a valid quantity amount. */
 const validateDishQuantity = (request, response, next) => {
     const { dishes } = request.body.data
 
@@ -63,6 +64,7 @@ const validateDishQuantity = (request, response, next) => {
     return next()
 }
 
+/** All of the property validation tests required for a given order. */
 const propertyValidation = [
     propertyStringNotEmpty("deliverTo"),
     propertyStringNotEmpty("mobileNumber"),
@@ -71,16 +73,25 @@ const propertyValidation = [
     validateDishQuantity
 ]
 
-/** Given a dishId, looks for and stores the dish in response.locals.dish */
+/** Finds and stores order in `response.locals.order` and index in `response.locals.index` */
 const orderExists = (request, response, next) => {
     let found = null
     let { orderId } = request.params
+    let foundIndex = -1
 
-    found = orders.find((order) => order.id === orderId)
+    // findIndex is typically faster, hence why used here.
+    foundIndex = orders.findIndex((order) => {
+        if (order.id !== orderId) return false
+        found = order
+        return true
+    })
+
+
 
     if (!found) return next(new ErrorCode(404, `Order does not exist: ${orderId}`))
 
     response.locals.order = found
+    response.locals.index = foundIndex
     next()
 }
 
@@ -118,6 +129,7 @@ const statusNotDelivered = (request, response, next) => {
     return next()
 }
 
+/** Ensures that the status is pending for deletion */
 const statusPending = (request, response, next) => {
     const { status } = response.locals.order
 
@@ -164,9 +176,7 @@ const update = (request, response) => {
 }
 
 const destroy = (request, response) => {
-    let { id } = response.locals.order
-
-    const index = orders.findIndex((order) => order.id === id)
+    const { index } = response.locals.order
 
     const deletedIndex = orders.splice(index, 1)
 
