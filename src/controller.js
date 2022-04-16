@@ -46,7 +46,7 @@ class Controller {
 
     static executeQueries(object, queries) {
         return function (request, response, next) {
-            console.log(response.locals.queryList)
+            //console.log(response.locals.queryList)
 
             for (let q in response.locals.queryList) {
                 const { query } = response.locals.queryList[q]
@@ -139,7 +139,7 @@ class Controller {
 
             } else {
                 const found = object.findById(id, true)
-                console.log(id)
+                //console.log(id)
                 if (found.item) {
                     response.locals.item = found.item
                     response.locals.index = found.index
@@ -208,7 +208,7 @@ const controller = (list, nextId, options = {}) => {
         deleteVerifications = [],
         updateVerifications = []
     } = options
-    console.log(additionalQueries)
+    //console.log(additionalQueries)
     const item = new Controller(list);
 
     // creates a template object for full customizability
