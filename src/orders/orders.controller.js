@@ -11,10 +11,10 @@ const ErrorCode = require("../errors/ErrorCodes");
 // TODO: Implement the /orders handlers needed to make the tests pass
 
 const checkOrderStatus = (request, response, next) => {
-    console.log(response.locals.item.status)
+    //console.log(response.locals.item.status)
 
     if (response.locals.item.status !== "pending") {
-        console.log(response.locals.item.status)
+        //console.log(response.locals.item.status)
         return next(new ErrorCode(400, "pending"))
     }
 

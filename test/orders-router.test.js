@@ -758,7 +758,7 @@ describe("orders router", () => {
       expect(response.body.data).toBeUndefined();
       expect(response.body.error).toBeUndefined();
       expect(response.status).toBe(204);
-      
+
       const deleted = await request(app)
         .get(`${ATTACHED_PATH}/22`)
         .set("Accept", "application/json");
